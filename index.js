@@ -11,10 +11,13 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 
+app.use('/public', express.static('public'));
+
 // Rutas
 app.use('/api/users', require('./routes/users'));
 app.use('/api/clients', require('./routes/clients'));
 app.use('/api/projects', require('./routes/projects'));
+app.use('/api/albaranes', require('./routes/albaranes'));
 
 // Middleware de errores
 app.use((err, req, res, next) => {
