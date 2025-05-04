@@ -1,0 +1,48 @@
+### REGISTRO
+POST http://localhost:3000/api/users/register
+Content-Type: application/json
+
+{
+  "email": "usuario@ejemplo.com",
+  "password": "123456"
+}
+
+### LOGIN
+POST http://localhost:3000/api/users/login
+Content-Type: application/json
+
+{
+  "email": "usuario@ejemplo.com",
+  "password": "123456"
+}
+
+### VALIDAR CÓDIGO (usa el token del login)
+PUT http://localhost:3000/api/users/validation
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTdjMjZiNDgxMzNiYjE5YzRkMzE3NiIsImVtYWlsIjoidXN1YXJpb0BlamVtcGxvLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ2Mzg3NzcyLCJleHAiOjE3NDYzOTQ5NzJ9.ScbT-sBR6_MWmtz263NsInIBOE_BgwfE_EiCUhwLvak
+
+{
+  "code": "119472"
+}
+
+### CREAR CLIENTE
+POST http://localhost:3000/api/clients
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTdjMjZiNDgxMzNiYjE5YzRkMzE3NiIsImVtYWlsIjoidXN1YXJpb0BlamVtcGxvLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ2Mzg3NzcyLCJleHAiOjE3NDYzOTQ5NzJ9.ScbT-sBR6_MWmtz263NsInIBOE_BgwfE_EiCUhwLvak
+
+{
+  "name": "Cliente REST",
+  "email": "cliente@empresa.com",
+  "phone": "612345678"
+}
+
+### CREAR PROYECTO
+POST http://localhost:3000/api/projects
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTdjMjZiNDgxMzNiYjE5YzRkMzE3NiIsImVtYWlsIjoidXN1YXJpb0BlamVtcGxvLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ2Mzg3NzcyLCJleHAiOjE3NDYzOTQ5NzJ9.ScbT-sBR6_MWmtz263NsInIBOE_BgwfE_EiCUhwLvak
+
+{
+  "name": "Proyecto REST Client",
+  "description": "Probando desde VS Code",
+  "client": "6817c3e248133bb19c4d3180"
+}

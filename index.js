@@ -13,6 +13,8 @@ app.use(express.json());
 
 // Rutas
 app.use('/api/users', require('./routes/users'));
+app.use('/api/clients', require('./routes/clients'));
+app.use('/api/projects', require('./routes/projects'));
 
 // Middleware de errores
 app.use((err, req, res, next) => {
