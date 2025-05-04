@@ -1,19 +1,27 @@
-const dbConnect = require('./config/mongo');
-const express = require("express");
-const cors = require("cors");
 require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const morgan = require('morgan');
+const connectDB = require('./config/mongo');
 
 const app = express();
+connectDB();
 
 app.use(cors());
+app.use(morgan('dev'));
 app.use(express.json());
-app.use("/api", require("./routes"));
-app.use(express.static("storage")) // http://localhost:3000/file.jpg
 
-const port = process.env.PORT || 3000;
+// Rutas
+app.use('/api/users', require('./routes/users'));
 
-dbConnect();
+// Middleware de errores
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(err.status || 500).json({ error: err.message || 'Error interno del servidor' });
+});
 
-app.listen(port, () => {
-    console.log("Servidor escuchando en el puerto " + port);
-})
+// Iniciar servidor
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+});
