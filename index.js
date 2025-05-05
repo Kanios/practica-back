@@ -4,6 +4,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const connectDB = require('./config/mongo');
 const { handleHttpError } = require('./utils/handleError');
+const swaggerDocs = require('./docs/swagger');
 
 const app = express();
 connectDB();
@@ -12,6 +13,10 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 
+// Documentación Swagger
+swaggerDocs(app);
+
+// Archivos estáticos (firmas)
 app.use('/public', express.static('public'));
 
 // Rutas
