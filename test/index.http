@@ -123,6 +123,39 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmY
   "client": "6818b88a55e6543d2952bb8c"
 }
 
+### OBTENER TODOS LOS PROYECTOS
+GET http://localhost:3000/api/projects
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MDQxNCwiZXhwIjoxNzQ2NDU3NjE0fQ._vGiJX1gmdLbqjUCyfKv6i-1ygpZDSXqGQOut6-70Yw
+
+### OBTENER UN PROYECTO POR ID poner id del proyecto
+GET http://localhost:3000/api/projects/6817c3f048133bb19c4d3182
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MDQxNCwiZXhwIjoxNzQ2NDU3NjE0fQ._vGiJX1gmdLbqjUCyfKv6i-1ygpZDSXqGQOut6-70Yw
+
+### ACTUALIZAR PROYECTO poner id del proyecto
+PUT http://localhost:3000/api/projects/6817c3f048133bb19c4d3182
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MDQxNCwiZXhwIjoxNzQ2NDU3NjE0fQ._vGiJX1gmdLbqjUCyfKv6i-1ygpZDSXqGQOut6-70Yw
+
+{
+  "description": "Proyecto actualizado desde test"
+}
+
+### ARCHIVAR PROYECTO (soft delete) poner id del proyecto
+DELETE http://localhost:3000/api/projects/archive/6817c3f048133bb19c4d3182
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MDQxNCwiZXhwIjoxNzQ2NDU3NjE0fQ._vGiJX1gmdLbqjUCyfKv6i-1ygpZDSXqGQOut6-70Yw
+
+### VER PROYECTOS ARCHIVADOS
+GET http://localhost:3000/api/projects/archived/all
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MDQxNCwiZXhwIjoxNzQ2NDU3NjE0fQ._vGiJX1gmdLbqjUCyfKv6i-1ygpZDSXqGQOut6-70Yw
+
+### RESTAURAR PROYECTO ARCHIVADO poner id del proyecto
+POST http://localhost:3000/api/projects/restore/6817c3f048133bb19c4d3182
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MDQxNCwiZXhwIjoxNzQ2NDU3NjE0fQ._vGiJX1gmdLbqjUCyfKv6i-1ygpZDSXqGQOut6-70Yw
+
+### ELIMINAR PROYECTO (hard delete) poner id del proyecto
+DELETE http://localhost:3000/api/projects/6817c3f048133bb19c4d3182/hard
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MDQxNCwiZXhwIjoxNzQ2NDU3NjE0fQ._vGiJX1gmdLbqjUCyfKv6i-1ygpZDSXqGQOut6-70Yw
+
 ### CREAR ALBARÁN
 POST http://localhost:3000/api/albaranes
 Content-Type: application/json

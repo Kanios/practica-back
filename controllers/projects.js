@@ -42,8 +42,7 @@ const getProjectById = async (req, res, next) => {
 // Editar un proyecto
 const updateProject = async (req, res, next) => {
   try {
-    const body = matchedData(req);
-    const updated = await Project.findByIdAndUpdate(req.params.id, body, { new: true });
+    const updated = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json(updated);
   } catch (err) {
     next(err);
@@ -73,7 +72,12 @@ const deleteProject = async (req, res, next) => {
 // Ver proyectos archivados
 const getArchivedProjects = async (req, res, next) => {
   try {
-    const projects = await Project.findDeleted({ createdBy: req.user.id });
+    const projects = await Project.findDeleted({
+      $or: [
+        { createdBy: req.user.id },
+        { company: req.user.company }
+      ]
+    });
     res.json(projects);
   } catch (err) {
     next(err);
