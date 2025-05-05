@@ -5,11 +5,23 @@ const { matchedData } = require('express-validator');
 const createProject = async (req, res, next) => {
   try {
     const body = matchedData(req);
+
+    //Verificar si ya existe un proyecto con el mismo nombre
+    const existingProject = await Project.findOne({
+      name: body.name,
+      $or: [{ createdBy: req.user.id }, { company: req.user.company }]
+    });
+
+    if (existingProject) {
+      return res.status(409).json({ error: 'El proyecto ya existe para este usuario o compañía' });
+    }
+
     const project = await Project.create({
       ...body,
       createdBy: req.user.id,
       company: req.user.company
     });
+
     res.status(201).json(project);
   } catch (err) {
     next(err);

@@ -31,11 +31,14 @@ const getAll = async (req, res, next) => {
   }
 };
 
-// Obtener un albarán por ID
+// Obtener un albarán por ID con proyecto, cliente y usuario
 const getById = async (req, res, next) => {
   try {
     const note = await Albaran.findById(req.params.id)
-      .populate('project')
+      .populate({
+        path: 'project',
+        populate: { path: 'client' } // <- esto es lo que faltaba
+      })
       .populate({ path: 'createdBy', select: 'email company' });
 
     if (!note) return res.status(404).json({ message: 'Albarán no encontrado' });
@@ -111,7 +114,7 @@ const sign = async (req, res, next) => {
     const base64Data = base64.replace(/^data:image\/\w+;base64,/, '');
     const buffer = Buffer.from(base64Data, 'base64');
 
-    // 🧪 ESCRIBIR IMAGEN PARA VERIFICAR
+    // ESCRIBIR IMAGEN PARA VERIFICAR
     const fs = require('fs');
     fs.writeFileSync('firma_prueba.png', buffer); // Esto crea el archivo en la raíz del proyecto
 

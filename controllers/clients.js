@@ -1,15 +1,26 @@
 const Client = require('../models/clients');
 const { matchedData } = require('express-validator');
 
-// Crear cliente
 const createClient = async (req, res, next) => {
   try {
     const body = matchedData(req);
+
+    // Verificar si ya existe un cliente con ese email para ese usuario o su compañía
+    const existingClient = await Client.findOne({
+      email: body.email,
+      $or: [{ createdBy: req.user.id }, { company: req.user.company }]
+    });
+
+    if (existingClient) {
+      return res.status(409).json({ error: 'El cliente ya existe para este usuario o compañía' });
+    }
+
     const client = await Client.create({
       ...body,
       createdBy: req.user.id,
       company: req.user.company,
     });
+
     res.status(201).json(client);
   } catch (err) {
     next(err);
