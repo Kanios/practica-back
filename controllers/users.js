@@ -152,11 +152,39 @@ const inviteUser = async (req, res, next) => {
   }
 };
 
+// ARCHIVAR USUARIO (soft delete)
+const archiveUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await User.delete({ _id: id });
+    if (!user) return handleHttpError(res, 'Usuario no encontrado', 404);
+    res.json({ message: 'Usuario archivado (soft delete)' });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ELIMINAR USUARIO (hard delete)
+const hardDeleteUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const deleted = await User.deleteOne({ _id: id });
+    if (deleted.deletedCount === 0) {
+      return handleHttpError(res, 'Usuario no encontrado', 404);
+    }
+    res.json({ message: 'Usuario eliminado (hard delete)' });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   register,
   login,
   validate,
   recoverPassword,
   resetPassword,
-  inviteUser
+  inviteUser,
+  archiveUser,
+  hardDeleteUser
 };

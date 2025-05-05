@@ -42,6 +42,14 @@ Content-Type: application/json
   "email": "rubypascu@gmail.com"
 }
 
+### ARCHIVAR USUARIO (soft delete) poner id del usuario
+DELETE http://localhost:3000/api/users/archive/6818a6fa89bc41c483e65db6
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MTg5OCwiZXhwIjoxNzQ2NDU5MDk4fQ.11lkYO513ijvE3kWEWg_iayS4k_WPnxgQT7LLjEXTsQ
+
+### ELIMINAR USUARIO (hard delete) poner id del usuario
+DELETE http://localhost:3000/api/users/6818a6fa89bc41c483e65db6/hard
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MTg5OCwiZXhwIjoxNzQ2NDU5MDk4fQ.11lkYO513ijvE3kWEWg_iayS4k_WPnxgQT7LLjEXTsQ
+
 ### CAMBIAR CONTRASEÑA CON TOKEN
 PUT http://localhost:3000/api/users/reset-password
 Content-Type: application/json
@@ -103,7 +111,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmY
 DELETE http://localhost:3000/api/albaranes/archive/6818a84412425b4a63eb88df
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ0NjA4MCwiZXhwIjoxNzQ2NDUzMjgwfQ.kBenxMqnA4lG5pkRjpJePKXeZ7-LKPyyCvRf1dTQj5I
 
-### ELIMINAR (hard delete)
+### ELIMINAR ALBARÁN (hard delete)
 DELETE http://localhost:3000/api/albaranes/6817e19d28e9635dcd7bf078
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTdjMjZiNDgxMzNiYjE5YzRkMzE3NiIsImVtYWlsIjoidXN1YXJpb0BlamVtcGxvLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ2Mzk1MzE1LCJleHAiOjE3NDY0MDI1MTV9.ekxIFdmDaBhKmxb6yZnRIPVKbvLEC1fsrIl7Q_xq6tg
 

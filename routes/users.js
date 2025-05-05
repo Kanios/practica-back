@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { register, login, validate, inviteUser } = require('../controllers/users');
+const { register, login, validate, inviteUser, archiveUser, hardDeleteUser } = require('../controllers/users');
 const { registerValidator, loginValidator } = require('../validators/users');
 const { authMiddleware } = require('../middleware/auth');
 const { recoverPassword, resetPassword } = require('../controllers/users');
@@ -22,5 +22,11 @@ router.put('/reset-password', resetPassword);
 
 // Ruta para invitar a otro usuario a la misma compañía
 router.post('/invite', authMiddleware, inviteUser);
+
+// Ruta para archivar usuario(soft delete)
+router.delete('/archive/:id', authMiddleware, archiveUser);
+
+// Ruta para eliminar usuario(hard delete)
+router.delete('/:id/hard', authMiddleware, hardDeleteUser);
 
 module.exports = router;
