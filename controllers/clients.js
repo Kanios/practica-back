@@ -42,8 +42,11 @@ const getClientById = async (req, res, next) => {
 // Editar cliente
 const updateClient = async (req, res, next) => {
   try {
-    const body = matchedData(req);
-    const client = await Client.findByIdAndUpdate(req.params.id, body, { new: true });
+    const client = await Client.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
     res.json(client);
   } catch (err) {
     next(err);

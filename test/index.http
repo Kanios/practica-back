@@ -75,9 +75,42 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmY
 
 {
   "name": "Cliente REST",
-  "email": "rubypascu@gmail.com",
+  "email": "cliente@empresa.com",
   "phone": "612345678"
 }
+
+### OBTENER TODOS LOS CLIENTES
+GET http://localhost:3000/api/clients
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MDQxNCwiZXhwIjoxNzQ2NDU3NjE0fQ._vGiJX1gmdLbqjUCyfKv6i-1ygpZDSXqGQOut6-70Yw
+
+### OBTENER UN CLIENTE POR ID poner id cliente
+GET http://localhost:3000/api/clients/6818a83212425b4a63eb88db
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MDQxNCwiZXhwIjoxNzQ2NDU3NjE0fQ._vGiJX1gmdLbqjUCyfKv6i-1ygpZDSXqGQOut6-70Yw
+
+### ACTUALIZAR CLIENTE
+PUT http://localhost:3000/api/clients/6818a83212425b4a63eb88db
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MDQxNCwiZXhwIjoxNzQ2NDU3NjE0fQ._vGiJX1gmdLbqjUCyfKv6i-1ygpZDSXqGQOut6-70Yw
+
+{
+  "phone": "666999888"
+}
+
+### ARCHIVAR CLIENTE (soft delete)
+DELETE http://localhost:3000/api/clients/archive/6818a83212425b4a63eb88db
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MDQxNCwiZXhwIjoxNzQ2NDU3NjE0fQ._vGiJX1gmdLbqjUCyfKv6i-1ygpZDSXqGQOut6-70Yw
+
+### VER CLIENTES ARCHIVADOS
+GET http://localhost:3000/api/clients/archived/all
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MDQxNCwiZXhwIjoxNzQ2NDU3NjE0fQ._vGiJX1gmdLbqjUCyfKv6i-1ygpZDSXqGQOut6-70Yw
+
+### RESTAURAR CLIENTE ARCHIVADO
+POST http://localhost:3000/api/clients/restore/6818a83212425b4a63eb88db
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MDQxNCwiZXhwIjoxNzQ2NDU3NjE0fQ._vGiJX1gmdLbqjUCyfKv6i-1ygpZDSXqGQOut6-70Yw
+
+### ELIMINAR CLIENTE (hard delete)
+DELETE http://localhost:3000/api/clients/6818a83212425b4a63eb88db/hard
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MDQxNCwiZXhwIjoxNzQ2NDU3NjE0fQ._vGiJX1gmdLbqjUCyfKv6i-1ygpZDSXqGQOut6-70Yw
 
 ### CREAR PROYECTO
 POST http://localhost:3000/api/projects
