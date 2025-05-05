@@ -5,19 +5,32 @@ const { handleHttpError } = require('../utils/handleError');
 const { tokenSign } = require('../utils/handleJwt');
 const { compare, encrypt } = require('../utils/handlePassword');
 const { sendVerificationEmail, sendRecoveryEmail } = require('../utils/handleEmail');
+const { sendInviteEmail } = require('../utils/handleEmail');
 
 // REGISTRO DE USUARIO
 const register = async (req, res, next) => {
   try {
-    const body = matchedData(req);
+    const body = matchedData(req); //extrae email, password, inviteCode...
+
+    // Verificar si hay código de invitación
+    const { inviteCode } = req.body;
+
+    if (inviteCode && global.inviteCodes?.[inviteCode]) {
+      const { company, expiresAt } = global.inviteCodes[inviteCode];
+      if (Date.now() < expiresAt) {
+        body.company = company; // ✅ Asignamos la misma empresa
+      } else {
+        return handleHttpError(res, 'Código de invitación expirado', 400);
+      }
+    }
 
     const code = Math.floor(100000 + Math.random() * 900000).toString();
-    const password = await encrypt(body.password);  // 👈 Asegúrate de esto
+    const password = await encrypt(body.password);
 
     const user = await User.create({
       ...body,
       password,
-      code
+      validationCode: code
     });
 
     await sendVerificationEmail(user.email, code);
@@ -116,10 +129,34 @@ const resetPassword = async (req, res, next) => {
   }
 };
 
+const inviteUser = async (req, res, next) => {
+  try {
+    const inviter = await User.findById(req.user._id);
+
+    if (!inviter || !inviter.company) {
+      return handleHttpError(res, 'No puedes invitar sin compañía asignada', 403);
+    }
+
+    const { email } = req.body;
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Guardamos el código y compañía en memoria temporal (o podrías usar Mongo)
+    global.inviteCodes = global.inviteCodes || {};
+    global.inviteCodes[code] = { company: inviter.company, expiresAt: Date.now() + 15 * 60 * 1000 }; // 15 min
+
+    await sendInviteEmail(email, code, inviter.email);
+
+    res.json({ message: 'Invitación enviada por correo' });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   register,
   login,
   validate,
   recoverPassword,
-  resetPassword
+  resetPassword,
+  inviteUser
 };

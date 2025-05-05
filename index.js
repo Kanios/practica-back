@@ -18,6 +18,7 @@ app.use('/api/users', require('./routes/users'));
 app.use('/api/clients', require('./routes/clients'));
 app.use('/api/projects', require('./routes/projects'));
 app.use('/api/albaranes', require('./routes/albaranes'));
+app.use('/api/companies', require('./routes/companies'));
 
 // Middleware de errores
 app.use((err, req, res, next) => {

@@ -7,50 +7,85 @@ Content-Type: application/json
   "password": "123456"
 }
 
-### LOGIN
+### REGISTRO CON ENVÍO DE EMAIL
+POST http://localhost:3000/api/users/register
+Content-Type: application/json
+
+{
+  "email": "rubypascu@gmail.com",
+  "password": "123456"
+}
+
+### LOGIN PARA OBTENER EL TOKEN
 POST http://localhost:3000/api/users/login
 Content-Type: application/json
 
 {
-  "email": "usuario@ejemplo.com",
-  "password": "123456"
+  "email": "rubypascu@gmail.com",     
+  "password": "nuevacontraseña123"                
 }
 
-### VALIDAR CÓDIGO (usa el token del login)
+### VALIDAR USUARIO CON CÓDIGO
 PUT http://localhost:3000/api/users/validation
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTdjMjZiNDgxMzNiYjE5YzRkMzE3NiIsImVtYWlsIjoidXN1YXJpb0BlamVtcGxvLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ2Mzg3NzcyLCJleHAiOjE3NDYzOTQ5NzJ9.ScbT-sBR6_MWmtz263NsInIBOE_BgwfE_EiCUhwLvak
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ0NjA4MCwiZXhwIjoxNzQ2NDUzMjgwfQ.kBenxMqnA4lG5pkRjpJePKXeZ7-LKPyyCvRf1dTQj5I
 
 {
-  "code": "119472"
+  "code": "114270"
+}
+
+### PEDIR RECUPERACIÓN
+POST http://localhost:3000/api/users/recover
+Content-Type: application/json
+
+{
+  "email": "rubypascu@gmail.com"
+}
+
+### CAMBIAR CONTRASEÑA CON TOKEN
+PUT http://localhost:3000/api/users/reset-password
+Content-Type: application/json
+
+{
+  "token": "a997b02ff5e489ab898831e96d547e7fca98c34ae996a471bb03756a333373d0",
+  "password": "nuevacontraseña123"
+}
+
+### CREAR COMPAÑIA
+POST http://localhost:3000/api/companies
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MTg5OCwiZXhwIjoxNzQ2NDU5MDk4fQ.11lkYO513ijvE3kWEWg_iayS4k_WPnxgQT7LLjEXTsQ
+Content-Type: application/json
+
+{
+  "name": "nombre-de-la-compania"
 }
 
 ### CREAR CLIENTE
 POST http://localhost:3000/api/clients
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTdjMjZiNDgxMzNiYjE5YzRkMzE3NiIsImVtYWlsIjoidXN1YXJpb0BlamVtcGxvLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ2Mzg3NzcyLCJleHAiOjE3NDYzOTQ5NzJ9.ScbT-sBR6_MWmtz263NsInIBOE_BgwfE_EiCUhwLvak
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MDQxNCwiZXhwIjoxNzQ2NDU3NjE0fQ._vGiJX1gmdLbqjUCyfKv6i-1ygpZDSXqGQOut6-70Yw
 
 {
   "name": "Cliente REST",
-  "email": "cliente@empresa.com",
+  "email": "rubypascu@gmail.com",
   "phone": "612345678"
 }
 
 ### CREAR PROYECTO
 POST http://localhost:3000/api/projects
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTdjMjZiNDgxMzNiYjE5YzRkMzE3NiIsImVtYWlsIjoidXN1YXJpb0BlamVtcGxvLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ2Mzk1MzE1LCJleHAiOjE3NDY0MDI1MTV9.ekxIFdmDaBhKmxb6yZnRIPVKbvLEC1fsrIl7Q_xq6tg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MDQxNCwiZXhwIjoxNzQ2NDU3NjE0fQ._vGiJX1gmdLbqjUCyfKv6i-1ygpZDSXqGQOut6-70Yw
 
 {
   "name": "Proyecto REST Client",
   "description": "Probando desde VS Code",
-  "client": "6817c3e248133bb19c4d3180"
+  "client": "6818b88a55e6543d2952bb8c"
 }
 
 ### CREAR ALBARÁN
 POST http://localhost:3000/api/albaranes
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTdjMjZiNDgxMzNiYjE5YzRkMzE3NiIsImVtYWlsIjoidXN1YXJpb0BlamVtcGxvLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ2Mzk1MzE1LCJleHAiOjE3NDY0MDI1MTV9.ekxIFdmDaBhKmxb6yZnRIPVKbvLEC1fsrIl7Q_xq6tg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ0NjA4MCwiZXhwIjoxNzQ2NDUzMjgwfQ.kBenxMqnA4lG5pkRjpJePKXeZ7-LKPyyCvRf1dTQj5I
 
 {
   "type": "hours",
@@ -62,11 +97,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTdjMjZiN
 
 ### OBTENER TODOS LOS ALBARANES
 GET http://localhost:3000/api/albaranes
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTdjMjZiNDgxMzNiYjE5YzRkMzE3NiIsImVtYWlsIjoidXN1YXJpb0BlamVtcGxvLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ2Mzk1MzE1LCJleHAiOjE3NDY0MDI1MTV9.ekxIFdmDaBhKmxb6yZnRIPVKbvLEC1fsrIl7Q_xq6tg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ0NjA4MCwiZXhwIjoxNzQ2NDUzMjgwfQ.kBenxMqnA4lG5pkRjpJePKXeZ7-LKPyyCvRf1dTQj5I
 
 ### ARCHIVAR UN ALBARÁN
-DELETE http://localhost:3000/api/albaranes/archive/6817e0ff28e9635dcd7bf06b
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTdjMjZiNDgxMzNiYjE5YzRkMzE3NiIsImVtYWlsIjoidXN1YXJpb0BlamVtcGxvLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ2Mzk1MzE1LCJleHAiOjE3NDY0MDI1MTV9.ekxIFdmDaBhKmxb6yZnRIPVKbvLEC1fsrIl7Q_xq6tg
+DELETE http://localhost:3000/api/albaranes/archive/6818a84412425b4a63eb88df
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ0NjA4MCwiZXhwIjoxNzQ2NDUzMjgwfQ.kBenxMqnA4lG5pkRjpJePKXeZ7-LKPyyCvRf1dTQj5I
 
 ### ELIMINAR (hard delete)
 DELETE http://localhost:3000/api/albaranes/6817e19d28e9635dcd7bf078
@@ -79,4 +114,33 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTdjMjZiN
 
 {
   "base64": "data:image/png;base64,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"
+}
+
+
+### ENVIAR INVITACIÓN DE COMPANY A UN USUARIO NUEVO
+POST http://localhost:3000/api/users/invite
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MTg5OCwiZXhwIjoxNzQ2NDU5MDk4fQ.11lkYO513ijvE3kWEWg_iayS4k_WPnxgQT7LLjEXTsQ
+
+{
+  "email": "rubypascu@hotmail.com"
+}
+
+### REGISTRO CON INVITACIÓN A COMPANY DE USUARIO NUEVO
+POST http://localhost:3000/api/users/register
+Content-Type: application/json
+
+{
+  "email": "rubypascu@hotmail.com",
+  "password": "123456",
+  "inviteCode": "630096"
+}
+
+### INVITACIÓN A COMPANY USUARIO EXISTENTE
+POST http://localhost:3000/api/companies/invite-user
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4YTZmYTg5YmM0MWM0ODNlNjVkYjYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NjQ1MTg5OCwiZXhwIjoxNzQ2NDU5MDk4fQ.11lkYO513ijvE3kWEWg_iayS4k_WPnxgQT7LLjEXTsQ
+
+{
+  "email": "usuario@ejemplo.com"
 }

@@ -42,4 +42,20 @@ const sendRecoveryEmail = async (to, token) => {
   });
 };
 
-module.exports = { sendVerificationEmail, sendRecoveryEmail };
+const sendInviteEmail = async (to, code, inviterEmail) => {
+  const html = `
+    <h3>Invitación a unirse a la compañía de ${inviterEmail}</h3>
+    <p>Te han invitado a unirte. Usa el siguiente código para registrarte:</p>
+    <h2>${code}</h2>
+    <p>O pega este código durante el registro.</p>
+  `;
+
+  await transporter.sendMail({
+    from: `"Invitación" <${process.env.EMAIL_FROM}>`,
+    to,
+    subject: 'Has sido invitado a una compañía',
+    html
+  });
+};
+
+module.exports = { sendVerificationEmail, sendRecoveryEmail, sendInviteEmail };
