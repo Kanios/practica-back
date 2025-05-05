@@ -1,46 +1,65 @@
 const User = require('../models/users');
-const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const { matchedData } = require('express-validator');
-const { tokenSign, generateValidationCode } = require('../utils/token');
+const { handleHttpError } = require('../utils/handleError');
+const { tokenSign } = require('../utils/handleJwt');
+const { compare, encrypt } = require('../utils/handlePassword');
+const { sendVerificationEmail, sendRecoveryEmail } = require('../utils/handleEmail');
 
-// Controlador: Registro de nuevo usuario
+// REGISTRO DE USUARIO
 const register = async (req, res, next) => {
   try {
-    const body = matchedData(req); // Filtra los datos validados
-    const userExists = await User.findOne({ email: body.email });
-    if (userExists) return res.status(409).json({ message: 'Usuario ya existe' });
+    const body = matchedData(req);
 
-    const hashedPass = await bcrypt.hash(body.password, 10);
-    const validationCode = generateValidationCode(); // Genera un código de 6 dígitos
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const password = await encrypt(body.password);  // 👈 Asegúrate de esto
 
     const user = await User.create({
       ...body,
-      password: hashedPass,
-      validationCode,
+      password,
+      code
     });
 
-    // Simulación: en vez de enviar email, mostramos en consola
-    console.log(`Código de validación para ${user.email}: ${validationCode}`);
+    await sendVerificationEmail(user.email, code);
 
-    res.status(201).json({ message: 'Usuario creado. Revisa tu email para validar.' });
+    res.status(201).json({ message: 'Usuario registrado. Código enviado al correo.' });
   } catch (err) {
     next(err);
   }
 };
 
-// Controlador: Validación del usuario usando el código enviado
-const validateUser = async (req, res, next) => {
+// LOGIN DE USUARIO
+const login = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.id);
-    if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
+    const body = matchedData(req);
 
-    const { code } = req.body;
-    if (user.validationCode !== code) {
-      return res.status(400).json({ message: 'Código inválido' });
+    const user = await User.findOne({ email: body.email }).select('+password');
+    if (!user) return handleHttpError(res, 'Usuario no encontrado', 404);
+
+    const check = await compare(body.password, user.password);
+    if (!check) return handleHttpError(res, 'Credenciales inválidas', 401);
+
+    const token = await tokenSign(user);
+
+    res.json({ token });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// VALIDAR USUARIO CON CÓDIGO ENVIADO POR EMAIL
+const validate = async (req, res, next) => {
+  try {
+    const body = matchedData(req);
+
+    const user = await User.findById(req.user._id);
+    if (!user) return handleHttpError(res, 'No autorizado', 401);
+
+    if (user.code !== body.code) {
+      return handleHttpError(res, 'Código inválido', 400);
     }
 
     user.verified = true;
-    user.validationCode = null;
     await user.save();
 
     res.json({ message: 'Usuario validado correctamente' });
@@ -49,22 +68,58 @@ const validateUser = async (req, res, next) => {
   }
 };
 
-// Controlador: Inicio de sesión
-const login = async (req, res, next) => {
+// Solicitar recuperación de contraseña
+const recoverPassword = async (req, res, next) => {
   try {
-    const body = matchedData(req);
-    const user = await User.findOne({ email: body.email }).select('+password');
+    const { email } = req.body;
+    const user = await User.findOne({ email });
 
-    if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
+    if (!user) return handleHttpError(res, 'Usuario no encontrado', 404);
 
-    const passwordOK = await bcrypt.compare(body.password, user.password);
-    if (!passwordOK) return res.status(401).json({ message: 'Contraseña incorrecta' });
+    // Generar token aleatorio
+    const token = crypto.randomBytes(32).toString('hex');
+    const expiry = new Date(Date.now() + 15 * 60 * 1000); // 15 minutos
 
-    const token = await tokenSign(user); // Genera token JWT
-    res.json({ token });
+    user.resetToken = token;
+    user.resetTokenExpiry = expiry;
+    await user.save();
+
+    await sendRecoveryEmail(user.email, token); // te lo paso ahora
+
+    res.json({ message: 'Correo de recuperación enviado' });
   } catch (err) {
     next(err);
   }
 };
 
-module.exports = { register, login, validateUser };
+// Cambiar contraseña con token
+const resetPassword = async (req, res, next) => {
+  try {
+    const { token, password } = req.body;
+
+    const user = await User.findOne({
+      resetToken: token,
+      resetTokenExpiry: { $gt: new Date() }
+    }).select('+password');
+
+    if (!user) return handleHttpError(res, 'Token inválido o expirado', 400);
+
+    user.password = await encrypt(password);
+    user.resetToken = null;
+    user.resetTokenExpiry = null;
+
+    await user.save();
+
+    res.json({ message: 'Contraseña actualizada correctamente' });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = {
+  register,
+  login,
+  validate,
+  recoverPassword,
+  resetPassword
+};

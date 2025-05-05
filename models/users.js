@@ -10,7 +10,9 @@ const UserSchema = new mongoose.Schema(
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
     company: { type: String },
     verified: { type: Boolean, default: false }, // Si ha validado su correo
-    validationCode: { type: String } // Código de validación por correo
+    validationCode: { type: String }, // Código de validación por correo
+    resetToken: { type: String },
+    resetTokenExpiry: { type: Date }
   },
   { timestamps: true }
 );
