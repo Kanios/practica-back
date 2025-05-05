@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const connectDB = require('./config/mongo');
+const { handleHttpError } = require('./utils/handleError');
 
 const app = express();
 connectDB();
@@ -20,10 +21,16 @@ app.use('/api/projects', require('./routes/projects'));
 app.use('/api/albaranes', require('./routes/albaranes'));
 app.use('/api/companies', require('./routes/companies'));
 
+// Ruta de prueba para forzar un error 500 y probar Slack http://localhost:3000/error-test
+app.get('/error-test', (req, res) => {
+  throw new Error('Simulando error 500 para Slack');
+});
+
 // Middleware de errores
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(err.status || 500).json({ error: err.message || 'Error interno del servidor' });
+  const code = err.status || 500;
+  const message = err.message || 'Error interno del servidor';
+  handleHttpError(res, message, code);
 });
 
 // Iniciar servidor
