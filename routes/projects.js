@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/projects');
 const { authMiddleware } = require('../middleware/auth');
+const { projectValidator } = require('../validators/projects');
 
 /**
 * @swagger
@@ -43,7 +44,7 @@ const { authMiddleware } = require('../middleware/auth');
  *       400:
  *         description: Datos inválidos o cliente no válido
  */   
-router.post('/', authMiddleware, controller.createProject);
+router.post('/', authMiddleware, projectValidator, controller.createProject);
 
 
 /**

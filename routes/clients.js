@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/clients');
 const { authMiddleware } = require('../middleware/auth');
+const { clientValidator } = require('../validators/clients');
 
 /**
 * @swagger
@@ -38,7 +39,7 @@ const { authMiddleware } = require('../middleware/auth');
  *       201:
  *         description: Cliente creado
  */
-router.post('/', authMiddleware, controller.createClient);
+router.post('/', authMiddleware, clientValidator, controller.createClient);
 
 /**
  * @swagger

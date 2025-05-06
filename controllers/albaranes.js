@@ -3,6 +3,8 @@ const { matchedData } = require('express-validator');
 const { uploadToIPFS } = require('../utils/handleUpload');
 const { generatePdf } = require('../utils/handlePdf');
 const fs = require('fs');
+const path = require('path');
+
 
 // Crear un nuevo albarán
 const create = async (req, res, next) => {
@@ -97,7 +99,7 @@ const getArchived = async (req, res, next) => {
   }
 };
 
-// Firmar un albarán: guarda imagen en IPFS, genera PDF, marca como firmado
+// Firmar: genera PDF, sube firma y PDF a IPFS
 const sign = async (req, res, next) => {
   try {
     const albaran = await Albaran.findById(req.params.id).populate('project');
@@ -107,27 +109,32 @@ const sign = async (req, res, next) => {
     const { base64 } = req.body;
     if (!base64) return res.status(400).json({ message: 'Firma requerida' });
 
-    // Subir la firma a IPFS usando Pinata
+    // Subir firma a IPFS
     const signatureUrl = await uploadToIPFS(base64);
 
-    // Convertir base64 a buffer para insertar en el PDF
     const base64Data = base64.replace(/^data:image\/\w+;base64,/, '');
     const buffer = Buffer.from(base64Data, 'base64');
 
-    // ESCRIBIR IMAGEN PARA VERIFICAR
-    const fs = require('fs');
-    fs.writeFileSync('firma_prueba.png', buffer); // Esto crea el archivo en la raíz del proyecto
+    // Generar PDF con la firma
+    const pdfUrlLocal = await generatePdf(albaran, buffer);
+    const pdfPath = path.join(__dirname, '..', pdfUrlLocal);
 
-    // Generar PDF con firma
-    const pdfUrl = await generatePdf(albaran, buffer);
+    // Leer y subir PDF a IPFS
+    const pdfBuffer = fs.readFileSync(pdfPath);
+    const pdfBase64 = `data:application/pdf;base64,${pdfBuffer.toString('base64')}`;
+    const pdfUrlCloud = await uploadToIPFS(pdfBase64);
 
-    // Guardar los datos en el documento
+    // Guardar URLs
     albaran.signatureUrl = signatureUrl;
-    albaran.pdfUrl = pdfUrl;
+    albaran.pdfUrl = pdfUrlCloud;
     albaran.signed = true;
     await albaran.save();
 
-    res.json({ message: 'Albarán firmado', signatureUrl, pdfUrl });
+    res.json({
+      message: 'Albarán firmado',
+      signatureUrl,
+      pdfUrl: pdfUrlCloud
+    });
   } catch (err) {
     next(err);
   }
